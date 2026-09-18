@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabricio Vílchez Monge — Full-Stack Engineer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#161A23;
+    --ink-soft:#1E2330;
+    --paper:#EDEAE2;
+    --paper-dim:#B9B6AC;
+    --line:#3A4054;
+    --cyan:#4FB6AE;
+    --amber:#E8A33D;
+    --sans:'Space Grotesk', sans-serif;
+    --mono:'IBM Plex Mono', monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--sans);
+    line-height:1.5;
+  }
+
+  ::selection{background:var(--cyan); color:var(--ink);}
+
+  a{color:inherit;}
+
+  .rule{
+    border:none;
+    border-top:1px dashed var(--line);
+    margin:0;
+  }
+
+  /* ---------- Layout shell: ruler + content ---------- */
+  .sheet{
+    max-width:1040px;
+    margin:0 auto;
+    padding:0 28px;
+    position:relative;
+  }
+
+  .ruler{
+    position:fixed;
+    top:0; left:0; bottom:0;
+    width:40px;
+    background:var(--ink-soft);
+    border-right:1px solid var(--line);
+    display:none;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:24px 0;
+    z-index:5;
+  }
+  .ruler span{
+    writing-mode:vertical-rl;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.15em;
+    color:var(--paper-dim);
+    text-align:center;
+  }
+  @media(min-width:900px){
+    .ruler{display:flex;}
+    body{padding-left:40px;}
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    padding:64px 0 48px;
+    position:relative;
+  }
+  .tag{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--cyan);
+    letter-spacing:.08em;
+    margin:0 0 18px;
+  }
+  h1{
+    font-size:clamp(2.4rem, 6vw, 4.2rem);
+    line-height:1.02;
+    font-weight:700;
+    margin:0 0 22px;
+    max-width:12ch;
+  }
+  header p.lede{
+    font-size:1.1rem;
+    color:var(--paper-dim);
+    max-width:52ch;
+    margin:0 0 32px;
+  }
+  .contact-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:22px;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .contact-row a{
+    text-decoration:none;
+    border-bottom:1px solid var(--line);
+    padding-bottom:2px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .contact-row a:hover{
+    border-color:var(--cyan);
+    color:var(--cyan);
+  }
+
+  /* corner schematic marks on hero */
+  .hero-frame{
+    position:absolute;
+    inset:24px -8px auto auto;
+    width:64px; height:64px;
+    border-top:1px solid var(--line);
+    border-right:1px solid var(--line);
+    display:none;
+  }
+  @media(min-width:700px){ .hero-frame{display:block;} }
+
+  /* ---------- Section scaffolding ---------- */
+  section{padding:56px 0;}
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:34px;
+  }
+  .section-head .idx{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--amber);
+  }
+  .section-head h2{
+    font-size:1.5rem;
+    font-weight:700;
+    margin:0;
+  }
+  .section-head .fill{
+    flex:1;
+    border-top:1px dashed var(--line);
+    transform:translateY(-4px);
+  }
+
+  /* ---------- About / stack ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:40px;
+  }
+  @media(max-width:700px){ .about-grid{grid-template-columns:1fr;} }
+
+  .about-grid p{
+    color:var(--paper-dim);
+    max-width:56ch;
+    margin:0 0 16px;
+  }
+  .stack-list{
+    list-style:none;
+    margin:0; padding:0;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .stack-list li{
+    display:flex;
+    justify-content:space-between;
+    padding:9px 0;
+    border-bottom:1px solid var(--line);
+    color:var(--paper-dim);
+  }
+  .stack-list li span:last-child{color:var(--paper);}
+
+  /* ---------- Projects ---------- */
+  .project{
+    position:relative;
+    border:1px solid var(--line);
+    padding:30px 28px;
+    margin-bottom:22px;
+  }
+  .project::before, .project::after{
+    content:"";
+    position:absolute;
+    width:10px; height:10px;
+    border:1px solid var(--cyan);
+  }
+  .project::before{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
+  .project::after{ bottom:-1px; right:-1px; border-left:none; border-top:none; }
+
+  .project-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .project-head h3{
+    font-size:1.25rem;
+    margin:0;
+  }
+  .project-role{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--amber);
+    white-space:nowrap;
+    padding-top:5px;
+  }
+  .project p.desc{
+    color:var(--paper-dim);
+    max-width:64ch;
+    margin:0 0 18px;
+  }
+  .project ul.details{
+    margin:0 0 20px;
+    padding-left:18px;
+    color:var(--paper-dim);
+    font-size:14px;
+  }
+  .project ul.details li{ margin-bottom:6px; }
+  .project ul.details li::marker{ color:var(--cyan); }
+
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    font-family:var(--mono);
+    font-size:11px;
+    border:1px solid var(--line);
+    color:var(--paper-dim);
+    padding:4px 9px;
+  }
+
+  /* ---------- Experience timeline ---------- */
+  .timeline{
+    border-left:1px solid var(--line);
+    margin-left:6px;
+  }
+  .tl-item{
+    position:relative;
+    padding:0 0 30px 28px;
+  }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{
+    content:"";
+    position:absolute;
+    left:-4.5px; top:5px;
+    width:8px; height:8px;
+    background:var(--ink);
+    border:1px solid var(--cyan);
+    transform:rotate(45deg);
+  }
+  .tl-role{
+    font-weight:700;
+    font-size:1.02rem;
+    margin:0 0 2px;
+  }
+  .tl-meta{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--amber);
+    margin:0 0 8px;
+  }
+  .tl-item p.tl-desc{
+    color:var(--paper-dim);
+    font-size:14px;
+    max-width:62ch;
+    margin:0;
+  }
+
+  /* ---------- Footer / contact ---------- */
+  footer{
+    padding:64px 0 80px;
+    border-top:1px dashed var(--line);
+    margin-top:40px;
+  }
+  footer h2{
+    font-size:clamp(1.8rem, 4vw, 2.6rem);
+    margin:0 0 20px;
+    max-width:16ch;
+  }
+  .footer-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    font-family:var(--mono);
+    font-size:13px;
+    margin-top:26px;
+  }
+  .footer-links a{
+    text-decoration:none;
+    color:var(--cyan);
+    border-bottom:1px solid transparent;
+    transition:border-color .15s ease;
+  }
+  .footer-links a:hover{ border-color:var(--cyan); }
+  .footer-meta{
+    margin-top:56px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--line);
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .draw-in{
+      animation:draw .7s ease-out both;
+    }
+    @keyframes draw{
+      from{ opacity:0; transform:translateY(10px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="ruler" aria-hidden="true">
+  <span>FVM — PORTFOLIO</span>
+  <span>SAN JOSÉ, CR</span>
+</div>
+
+<div class="sheet">
+
+  <header>
+    <div class="hero-frame" aria-hidden="true"></div>
+    <p class="tag draw-in">FULL-STACK ENGINEER / SAN JOSÉ, COSTA RICA</p>
+    <h1 class="draw-in">I build the whole system, not just the screen.</h1>
+    <p class="lede draw-in">From database schema to deployed UI to the point-of-sale terminal it runs on. I work across Angular, React, Node.js and MySQL — and I use AI tooling deliberately, as a force multiplier, while standing behind every line that ships.</p>
+    <div class="contact-row draw-in">
+      <a href="mailto:fanicio2010@gmail.com">fanicio2010@gmail.com</a>
+      <a href="tel:+50689863549">+506 8986-3549</a>
+      <a href="https://github.com/" target="_blank" rel="noopener">github.com/fabricio</a>
+    </div>
+  </header>
+
+  <hr class="rule">
+
+  <section id="about">
+    <div class="section-head">
+      <span class="idx">01</span>
+      <h2>About</h2>
+      <div class="fill"></div>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>I'm a developer who likes owning things end to end — the data model, the API contract, the interface, and what happens when it's actually running in production. My work has ranged from a full restaurant point-of-sale platform to an AI chatbot processing public health queries for a government agency.</p>
+        <p>I'm comfortable being handed a rigid, imperfect legacy system and finding the version of "good" that fits inside it — rather than rebuilding from a blank page every time.</p>
+      </div>
+      <ul class="stack-list">
+        <li><span>Languages</span><span>TypeScript, JavaScript, Java, Python</span></li>
+        <li><span>Frontend</span><span>Angular, React, Bootstrap</span></li>
+        <li><span>Backend</span><span>Node.js, Express, NestJS</span></li>
+        <li><span>Data</span><span>MySQL, relational schema design</span></li>
+        <li><span>Infra</span><span>Firebase, Docker, Electron</span></li>
+        <li><span>AI tooling</span><span>Claude Code, Copilot, Azure AI</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section id="experience">
+    <div class="section-head">
+      <span class="idx">02</span>
+      <h2>Experience</h2>
+      <div class="fill"></div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <p class="tl-role">Systems Engineer — Taquería Fátima</p>
+        <p class="tl-meta">2026</p>
+        <p class="tl-desc">Designed and deployed the full POS and business management platform, from schema to storefront to desktop client.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-role">AI Developer (Azure) — Ministry of Health, Costa Rica</p>
+        <p class="tl-meta">2025</p>
+        <p class="tl-desc">Built and deployed an AI-powered chatbot to automate responses to public health queries at scale.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-role">Full Stack Web Developer — Museo Nacional de Costa Rica</p>
+        <p class="tl-meta">2024 – 2025</p>
+        <p class="tl-desc">Built and maintained responsive web solutions, translating museum operations needs into technical specs.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-role">Full Stack Development Intern — GFT</p>
+        <p class="tl-meta">2022</p>
+        <p class="tl-desc">Contributed to enterprise web applications inside an Agile / SCRUM team.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section id="side-projects">
+    <div class="section-head">
+      <span class="idx">03</span>
+      <h2>Fun side projects</h2>
+      <div class="fill"></div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>3D Print Library Organizer</h3>
+        <span class="project-role">TOOLING</span>
+      </div>
+      <p class="desc">A Swift command-line tool that uses Apple's on-device Foundation Models to bring order to a large, unstructured 3D-printing file library.</p>
+      <ul class="details">
+        <li>Recursive scan of an existing file library, no manual tagging required</li>
+        <li>On-device LLM classification run in batches, with session management to avoid context overflow</li>
+        <li>A normalization pass that merges near-duplicate category names into one consistent taxonomy</li>
+      </ul>
+      <div class="chips">
+        <span class="chip">Swift</span>
+        <span class="chip">Apple Foundation Models</span>
+        <span class="chip">On-device AI</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>MemeBudget</h3>
+        <span class="project-role">MOBILE APP</span>
+      </div>
+      <p class="desc">A minimal, personal finance app for tracking income, expenses and budgets, built for mobile with a smooth, gesture-driven feel.</p>
+      <ul class="details">
+        <li>Dashboard with total balance, recent transactions and an at-a-glance overview</li>
+        <li>Analytics view comparing income vs. expenses and tracking progress by category</li>
+        <li>Custom categories with budgets, monthly transaction history, and light/dark theme that follows system preference</li>
+        <li>Built with React Native + Expo, animated with Reanimated, local persistence via AsyncStorage</li>
+      </ul>
+      <div class="chips">
+        <span class="chip">React Native</span>
+        <span class="chip">Expo</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">Reanimated</span>
+      </div>
+    </div>
+    <div class="project">
+      <div class="project-head">
+        <h3>Kiri Guru: Costa Rica Adventure</h3>
+        <span class="project-role">WEB APP</span>
+      </div>
+      <p class="desc">A conscious ecotourism platform for exploring Costa Rica's natural and cultural gems — an interactive map, a smart trip planner, and a gamified passport for sustainable travel.</p>
+      <ul class="details">
+        <li>Interactive Leaflet map with category filters (volcanoes, beaches, hidden gems, culture) and planned-route overlays</li>
+        <li>Multi-criteria trip planner — duration, budget, distance and interests — with a drag-to-reorder itinerary builder</li>
+        <li>Gamified "Kiri Passport" with region stamps, seasonal eco-missions and adventurer rank progression</li>
+        <li>Community log of shared discoveries with local-guide verification, plus Gemini-powered trip recommendations</li>
+      </ul>
+      <div class="chips">
+        <span class="chip">React</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">Vite</span>
+        <span class="chip">Tailwind CSS</span>
+        <span class="chip">Leaflet</span>
+        <span class="chip">Gemini API</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Edu3D Interact</h3>
+        <span class="project-role">WEB APP</span>
+      </div>
+      <p class="desc">An interactive 3D educational platform for classrooms — teachers build measurable 3D geometry scenes and AI-generated quizzes, students explore and answer them, with camera-based AI shape recognition on top.</p>
+      <ul class="details">
+        <li>Teacher studio to build 3D scenes (primitives or custom GLTF models) with live position, rotation, scale and material controls</li>
+        <li>Real-time geometry visualizer showing dimensions, volume and surface area on 3D meshes</li>
+        <li>AI quiz generator (Gemini 2.5 Pro) plus classroom QR-code sharing for instant lesson access</li>
+        <li>Student view with orbit-controlled 3D exploration and camera-based AI shape recognition (Gemini 2.5 Flash)</li>
+      </ul>
+      <div class="chips">
+        <span class="chip">React</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">Three.js</span>
+        <span class="chip">Zustand</span>
+        <span class="chip">Gemini API</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <h2>Open to full-stack roles where I can own things end to end.</h2>
+    <div class="footer-links">
+      <a href="mailto:fanicio2010@gmail.com">Email me →</a>
+      <a href="tel:+50689863549">Call / WhatsApp →</a>
+      <a href="https://github.com/" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+    <p class="footer-meta">FABRICIO VÍLCHEZ MONGE — SAN JOSÉ, COSTA RICA — BUILT WITH CLAUDE CODE</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
